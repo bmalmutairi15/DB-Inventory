@@ -22,3 +22,15 @@ fields = ID,Name,Domain,col3,col4,col5,col6,col7,col8,col9,col10,col11,col12,col
 
 Finally, please report any issues you face using this app. by default inventoryV2.log will be located in Documents folder.
 
+#pip list for this project:
+Package                   Version
+------------------------- ---------
+configparser              5.0.2
+cryptography              3.4.7
+numpy                     1.21.2
+pandas                    1.3.2
+pyodbc                    4.0.32
+PyQt5                     5.15.4
+qtmodern                  0.2.0
+
+
