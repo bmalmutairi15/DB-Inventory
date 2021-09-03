@@ -1,24 +1,15 @@
 from PyQt5 import QtCore, QtWidgets, QtGui, QtChart
-#from PyQt5.QtChart import QChart, QChartView, QPieSeries, QPieSlice
-from PyQt5.QtGui import  QPen, QColor, QBrush #QPainter, QFont,
+from PyQt5.QtGui import  QPen, QColor, QBrush 
 import sys
 import os,csv,time
 import shutil
-#import time
-# os.environ['QT_API'] = 'pyqt5'
 import pandas as pd
-# from PyQt5 import QtWidgets
-# QtCore, QtGui,
 from PyQt5.QtWidgets import  QTableView, QWidget, QProgressBar, QFrame, QVBoxLayout, QLabel, QMessageBox
-#QLineEdit, QMainWindow, QSplashScreen, QApplication,
 from PyQt5.QtCore import QAbstractTableModel, Qt, QTimer
 from cryptography.fernet import Fernet
-# from PyQt5.QtGui import QPixmap
 import pyodbc
-# styles
 import qtmodern.styles
 import qtmodern.windows
-# import qdarkstyle
 import getpass
 import subprocess
 import gc
@@ -28,7 +19,6 @@ import configparser
 
 config = configparser.ConfigParser()
 configfile = os.environ['AppData'] + '\\InventoryV2Config.ini'
-# print(configfile)
 if os.path.isfile(configfile):
     config.read(configfile)
     # print('yes')
@@ -39,7 +29,6 @@ from inputwin import Ui_Dialog
 from preference import Ui_Dialog2
 from healthcheck import Ui_Form
 from scriptlibrary import *
-# from errormsg import MessageWindow
 import webbrowser
 
 username = getpass.getuser()
@@ -117,22 +106,17 @@ class pandasModel(QAbstractTableModel):
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
-        self.errmsg('About', 'Welcome to Database Inventory!<br/>Version: 2.1.0.1<br/>Owner: Bandar Almutairi!<br/>Email:bmalmutairi15@gmail.com')
-        # time.sleep(10)
+        self.errmsg('About', 'Welcome to SQL Database Inventory!<br/>Owner: Bandar Almutairi!<br/>Email:bmalmutairi15@gmail.com')
         MainWindow.setObjectName("MainWindow")
-        # MainWindow.resize(1600, 1000)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.horizontalLayoutWidget = QtWidgets.QWidget(self.centralwidget)
         self.horizontalLayoutWidget.setGeometry(QtCore.QRect(10, 0, 1200, 20))
-        # self.horizontalLayoutWidget.setGeometry(QtCore.QRect(10, 0, 931, 20))
         self.horizontalLayoutWidget.setObjectName("horizontalLayoutWidget")
         self.horizontalLayout = QtWidgets.QHBoxLayout(self.horizontalLayoutWidget)
         self.horizontalLayout.setContentsMargins(0, 0, 0, 0)
         self.horizontalLayout.setObjectName("horizontalLayout")
-
         self.SearchEntry = QtWidgets.QLineEdit(self.horizontalLayoutWidget)
-        # self.SearchEntry.returnPressed.connect(self.Searchbtn.click)
         self.SearchEntry.setObjectName("SearchEntry")
         self.horizontalLayout.addWidget(self.SearchEntry)
         self.Searchbtn = QtWidgets.QPushButton(self.horizontalLayoutWidget)
@@ -155,44 +139,35 @@ class Ui_MainWindow(object):
         self.SSHbtn = QtWidgets.QPushButton(self.horizontalLayoutWidget)
         self.SSHbtn.setObjectName("SSHbtn")
         self.horizontalLayout.addWidget(self.SSHbtn)
-
         self.HealthCheckbtn = QtWidgets.QPushButton(self.horizontalLayoutWidget)
         self.HealthCheckbtn.setObjectName("HealthCheckbtn")
         self.horizontalLayout.addWidget(self.HealthCheckbtn)
         #self.HealthCheckbtn.setEnabled(False)
-
         self.Statusbtn = QtWidgets.QPushButton(self.horizontalLayoutWidget)
         self.Statusbtn.setObjectName("Statusbtn")
         #self.Statusbtn.setEnabled(False)
         self.horizontalLayout.addWidget(self.Statusbtn)
-
         self.Dashboardbtn = QtWidgets.QPushButton(self.horizontalLayoutWidget)
         self.Dashboardbtn.setObjectName("Dashboardbtn")
         self.horizontalLayout.addWidget(self.Dashboardbtn)
-
         self.Failoverbtn = QtWidgets.QPushButton(self.horizontalLayoutWidget)
         self.Failoverbtn.setObjectName("Failoverbtn")
         self.horizontalLayout.addWidget(self.Failoverbtn)
         self.Failoverbtn.setEnabled(False)
-
         self.Librarybtn = QtWidgets.QPushButton(self.horizontalLayoutWidget)
         self.Librarybtn.setObjectName("Librarybtn")
         self.horizontalLayout.addWidget(self.Librarybtn)
         self.Librarybtn.setEnabled(True)
-
         self.InstallSQLbtn = QtWidgets.QPushButton(self.horizontalLayoutWidget)
         self.InstallSQLbtn.setObjectName("InstallSQLbtn")
         self.horizontalLayout.addWidget(self.InstallSQLbtn)
         self.InstallSQLbtn.setEnabled(False)
-        # spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Maximum)
-        # self.horizontalLayout.addItem(spacerItem)
         self.toolButton = QtWidgets.QToolButton(self.horizontalLayoutWidget, clicked=lambda: self.pref())
         self.toolButton.setObjectName("toolButton")
         self.horizontalLayout.addWidget(self.toolButton)
 
         self.gridLayoutWidget = QtWidgets.QWidget(self.centralwidget)
         self.gridLayoutWidget.setGeometry(QtCore.QRect(10, 35, tblFrameWidth, tblFrameHeight))
-        # self.gridLayoutWidget.setGeometry(QtCore.QRect(10, 30, 931, 521))
         self.gridLayoutWidget.setObjectName("gridLayoutWidget")
         self.gridLayout = QtWidgets.QGridLayout(self.gridLayoutWidget)
         self.gridLayout.setContentsMargins(0, 0, 0, 0)
@@ -205,7 +180,6 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
-        # self.connect(self.Searchbtn, SIGNAL("clicked()"),self.search)
         self.Searchbtn.clicked.connect(self.search)
         self.Deletebtn.clicked.connect(self.delete)
         self.Exportbtn.clicked.connect(self.export)
@@ -356,7 +330,6 @@ class Ui_MainWindow(object):
         self.chart.setTitle(
             "<strong>SQL Server Versions <br> <br> </strong>" + "<center>{} Instance Total </center>".format(
                 instancecount))
-        # self.chart.setTitle("<strong>SQL Server <br> Versions</strong>")
         self.chart2.setTitle(
             "<strong>Windows Server Versions <br> <br> </strong>" + "<center>{} node Total </center>".format(
                 servercount))
@@ -549,9 +522,6 @@ class Ui_MainWindow(object):
         except Exception as e:
             logger.error(str(e))
             self.errmsg('Warning', 'Operation Failed! please check inventoryV2.log for more details.')
-
-        #
-        # print(self.server,username)
     def checkstatus(self):
         #username = self.col2.strip() + '\\' + getpass.getuser()
         
@@ -621,10 +591,7 @@ class Ui_MainWindow(object):
             subprocess.Popen([r'C:\inventoryV2\bin\putty.bat', self.currentcell])
         except Exception as e:
             logger.error(str(e))
-
-    # noinspection PyTypeChecker
     def export(self):
-        #
         if self.df.empty:
             self.errmsg('Warning', 'No Data to be exported!')
         else:
