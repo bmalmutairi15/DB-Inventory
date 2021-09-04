@@ -27,11 +27,11 @@ Finally, please report any issues you face using this app. by default inventoryV
 Package                   Version
 ------------------------- ---------
 configparser              5.0.2     >> https://pypi.org/project/configparser/
-cryptography              3.4.7     >> https://pypi.org/project/cryptography/
+cryptography              3.4.8     >> https://pypi.org/project/cryptography/
 numpy                     1.21.2    >> https://pypi.org/project/numpy/
 pandas                    1.3.2     >> https://pandas.pydata.org/
 pyodbc                    4.0.32    >> https://pypi.org/project/pyodbc/
-PyQt5                     5.15.4    >> https://pypi.org/project/PyQt5/
+PySide2                   5.15.2    >> https://pypi.org/project/PySide2/
 qtmodern                  0.2.0     >> https://pypi.org/project/qtmodern/ 
 
 
