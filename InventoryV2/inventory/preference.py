@@ -1,5 +1,5 @@
 
-from PyQt5 import QtCore, QtWidgets
+from PySide2 import QtCore, QtWidgets
 import configparser
 import os
 from cryptography.fernet import Fernet

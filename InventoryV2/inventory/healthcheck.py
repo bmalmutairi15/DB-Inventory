@@ -1,8 +1,8 @@
 import os
 import sys,getpass
-from PyQt5 import QtCore, QtWidgets, QtWebEngineWidgets , QtGui
-from PyQt5.QtGui import QPageSize,QPageLayout
-from PyQt5.QtCore import *
+from PySide2 import QtCore, QtWidgets, QtWebEngineWidgets , QtGui
+from PySide2.QtGui import QPageSize,QPageLayout
+from PySide2.QtCore import *
 import configparser
 config = configparser.ConfigParser()
 configfile = os.environ['AppData'] + '\\InventoryV2Config.ini'

@@ -1,5 +1,5 @@
-from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtWidgets import *
+from PySide2 import QtCore, QtGui, QtWidgets
+from PySide2.QtWidgets import *
 #QMessageBox
 import pyodbc
 conn3 = pyodbc.connect("DSN=inventoryV2",timeout=1)
@@ -166,7 +166,7 @@ class Ui_Dialog3(object):
             doc1=self.textEdit.document().toPlainText()
             col3=str(doc1)
             self.SCRIPTS[self.tableWidget.currentRow()]=doc1
-            conn4 = pyodbc.connect("DSN=inventory",timeout=1)
+            conn4 = pyodbc.connect("DSN=inventoryV2",timeout=1)
             cursor4 = conn4.cursor()
             cursor4.execute('''exec SP_updatescript @col0=?,@col1=?,@col2=?,@col3=?;''',col0,col1,col2,col3)
             conn4.commit()
@@ -180,7 +180,7 @@ class Ui_Dialog3(object):
         try:
 
             col0=self.ID[self.tableWidget.currentRow()]
-            conn4 = pyodbc.connect("DSN=inventory",timeout=1)
+            conn4 = pyodbc.connect("DSN=inventoryV2",timeout=1)
             cursor4 = conn4.cursor()
             cursor4.execute('''exec SP_deletescript @col0=?;''',col0)
             conn4.commit()
@@ -205,7 +205,7 @@ class Ui_Dialog3(object):
             co2=self.tableWidget.item(0,1).text()
             doc=self.textEdit.document().toPlainText()
             co3=str(doc)
-            conn4 = pyodbc.connect("DSN=inventory",timeout=1)
+            conn4 = pyodbc.connect("DSN=inventoryV2",timeout=1)
             cursor4 = conn4.cursor()
             cursor4.execute('''exec sp_insertscript @col1=?,@col2=?,@col3=?;''',co1, co2, co3)
             conn4.commit()
