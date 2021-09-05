@@ -1,43 +1,36 @@
-from PySide2 import QtCore, QtWidgets, QtGui
+'''
+LGPL License
+Copyright (c) [2021] [bmalmutairi15@gmail.com]
+'''
 from PySide2.QtCharts import *
-from PySide2.QtGui import  QPen, QColor, QBrush #QPainter, QFont,
-import sys
-import os,csv,time
-import shutil
-import pandas as pd
-from pandas import DataFrame,read_sql_query
+from PySide2.QtGui import  QPen, QColor, QBrush 
 from PySide2.QtWidgets import  QTableView, QWidget, QProgressBar, QFrame, QVBoxLayout, QLabel, QMessageBox
-#QLineEdit, QMainWindow, QSplashScreen, QApplication,
 from PySide2.QtCore import QAbstractTableModel, Qt, QTimer
+import sys,os,csv,time
+import shutil
 from cryptography.fernet import Fernet
 import pyodbc
-# styles
 import qtmodern.styles
 import qtmodern.windows
-# import qdarkstyle
 import getpass
 import subprocess
-import gc
+import gc 
 import logging
 from logging.handlers import RotatingFileHandler
 import configparser
-
+import configparser
 config = configparser.ConfigParser()
 configfile = os.environ['AppData'] + '\\InventoryV2Config.ini'
-# print(configfile)
 if os.path.isfile(configfile):
     config.read(configfile)
-    # print('yes')
 else:
-    shutil.copy("C:/InventoryV2/deployment/InventoryV2Config.ini", configfile)
+    shutil.copy("../deployment/InventoryV2Config.ini", configfile)
     config.read(configfile)
 from inputwin import Ui_Dialog
 from preference import Ui_Dialog2
 from healthcheck import Ui_Form
 from scriptlibrary import *
-# from errormsg import MessageWindow
 import webbrowser
-
 username = getpass.getuser()
 theme = config['defaults']['theme']
 fields = config['defaults']['fields']
@@ -50,7 +43,6 @@ UseNativeBrowser = int(config['defaults']['UseNativeBrowser'])
 exportdirectory = config['defaults']['exportdirectory']
 UseCurrentUser = int(config['defaults']['UseCurrentUser'])
 sqlcmdpath = config['defaults']['sqlcmdpath']
-
 logger = logging.getLogger(":")
 logger.setLevel(logging.ERROR)
 user_profile = os.environ['USERPROFILE']
@@ -59,43 +51,43 @@ handler = RotatingFileHandler(log_file, maxBytes=10000, backupCount=5)
 formatter = logging.Formatter('%(asctime)s %(name)s %(levelname)s %(message)s')
 handler.setFormatter(formatter)
 logger.addHandler(handler)
-
-class pandasModel(QAbstractTableModel):
-
+class TableModel(QtCore.QAbstractTableModel):
     def __init__(self, data):
-        QAbstractTableModel.__init__(self)
+        super(TableModel, self).__init__()
         self._data = data
 
-    def rowCount(self, parent=None):
-        return self._data.shape[0]
+    def data(self, index, role):
+        #if role == Qt.DisplayRole:
+        if role == Qt.DisplayRole or role == Qt.EditRole:
+            # See below for the nested-list data structure.
+            # .row() indexes into the outer list,
+            # .column() indexes into the sub-list
+            value=self._data[index.row()][index.column()]
+            return str(value)
 
-    def columnCount(self, parnet=None):
-        return self._data.shape[1]
+    def rowCount(self, index):
+        # The length of the outer list.
+        return len(self._data)
 
-    def data(self, index, role=Qt.DisplayRole):
-        if index.isValid():
-            if role == Qt.DisplayRole or role == Qt.EditRole:
-                return str(self._data.iloc[index.row(), index.column()])
-        return None
-
+    def columnCount(self, index):
+        # The following takes the first sub-list, and returns
+        # the length (only works if all rows are an equal length)
+        return len(self._data[0])
     def headerData(self, col, orientation, role):
         if orientation == Qt.Horizontal and role == Qt.DisplayRole:
-            return self._data.columns[col]
+            return fields[col]
         return None
-
     def flags(self, index):
         return Qt.ItemIsEnabled | Qt.ItemIsEditable
-        # return Qt.ItemIsEnabled | Qt.ItemIsSelectable | Qt.ItemIsEditable
-
     def setData(self, index, value, role):
         if role == Qt.EditRole:
             # Set the value into the frame.
-            self._data.iloc[index.row(), index.column()] = value
+            self._data[index.row()][index.column()] = value
             NewValue = value
-            co0 = index.sibling(index.row(), 0).data()
-            ToBeUpdated = fields[int(index.column())]
-            # print(self.ToBeUpdated)
-            # print(co0,ToBeUpdated,NewValue)
+            co0 = index.sibling(index.row(), 0).data()  # .strip()
+            # self.co2=index.sibling(index.row(),2).data()
+            # self.co3=index.sibling(index.row(),3).data()
+            ToBeUpdated = fields[int(index.column())]  # .strip()
             try:
 
                 ucursor = conn.cursor()
@@ -109,11 +101,9 @@ class pandasModel(QAbstractTableModel):
             return True
 
         return False
-
-
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
-        self.errmsg('About', 'Welcome to Database Inventory!<br/>Version: 2.1.0.1<br/>Owner: Bandar Almutairi!<br/>Email:bmalmutairi15@gmail.com')
+        self.errmsg('About', 'Welcome to Database Inventory!<br/>Version: 2.1.0.2<br/>Owner: Bandar Almutairi!<br/>Email:bmalmutairi15@gmail.com')
         # time.sleep(10)
         MainWindow.setObjectName("MainWindow")
         # MainWindow.resize(1600, 1000)
@@ -250,8 +240,6 @@ class Ui_MainWindow(object):
             self.gridLayout.removeWidget(self.Outputtbl)
             self.Outputtbl.deleteLater()
             self.Outputtbl = None
-            del self.SQL_Query
-            del self.df
             del self.model
 
         except:
@@ -431,8 +419,6 @@ class Ui_MainWindow(object):
             self.gridLayout.removeWidget(self.Outputtbl)
             self.Outputtbl.deleteLater()
             self.Outputtbl = None
-            del self.SQL_Query
-            del self.df
             del self.model
             self.gridLayout.removeWidget(self.chartView)
             self.chartView.deleteLater()
@@ -448,17 +434,28 @@ class Ui_MainWindow(object):
             gc.collect()
             del self.currentcell
             del self.col0
-            #del self.col1
+            del self.col1
             del self.col2
-            #del self.col3
+            del self.col3
         except:
 
             pass
 
-        try:
-            self.SQL_Query = pd.read_sql_query("exec sp_search ?;", conn, params=[searchinput])
-            self.df = pd.DataFrame(self.SQL_Query, columns=fields)
-            self.model = pandasModel(self.df)
+        cursor = conn.cursor()
+        cursor.execute('sp_search ?',searchinput)
+        self.output = cursor.fetchall()
+        x=len(self.output)
+        if x == 0:
+            self.Deletebtn.setEnabled(False)
+            self.Exportbtn.setEnabled(False)
+            self.RDPbtn.setEnabled(False)
+            self.SSHbtn.setEnabled(False)
+            self.HealthCheckbtn.setEnabled(False)
+            self.Statusbtn.setEnabled(False)
+            self.errmsg('Information', 'No record matched your search! please try again.')
+        else:
+   
+            self.model=TableModel(self.output)
             self.Outputtbl = QTableView(self.gridLayoutWidget)
             self.header = self.Outputtbl.horizontalHeader()
             self.header.setSectionResizeMode(QtWidgets.QHeaderView.Stretch)
@@ -466,9 +463,6 @@ class Ui_MainWindow(object):
             self.Outputtbl.setColumnHidden(0, True)
             self.gridLayout.addWidget(self.Outputtbl, 0, 0, 1, 3)
             self.Outputtbl.clicked.connect(self.Selected)
-        except Exception as e:
-            logger.error(str(e))
-            self.errmsg('Warning', 'Operation Failed! please check inventoryV2.log for more details.')
     def Selected(self):
         index = (self.Outputtbl.selectionModel().currentIndex())
         value = index.sibling(index.row(), index.column()).data()
@@ -530,24 +524,31 @@ class Ui_MainWindow(object):
             self.errmsg('Warning', 'Operation Failed! please check inventoryV2.log for more details.')
 
     def RDP(self):
-        try:
-            username = self.col2.strip() + '\\' + getpass.getuser()
-            k = config['optional']['k']
-            fernet = Fernet(k)
-            step1 = config['optional']['pwd']
-            step2 = bytes(step1[1:], "utf8")
-            PWD = (fernet.decrypt(step2).decode()).strip()
-            #print(len(PWD))
-            if len(PWD) > 2:
-                subprocess.Popen([r'C:\inventoryV2\bin\RDPwithPWD.bat', self.currentcell, username, PWD])
-            else:
-                p=subprocess.Popen([r'C:\inventoryV2\bin\RDP.bat', self.currentcell, username])
-        except Exception as e:
-            logger.error(str(e))
-            self.errmsg('Warning', 'Operation Failed! please check inventoryV2.log for more details.')
+        #try:
+        username = self.col2.strip() + '\\' + getpass.getuser()
+        print(os.getcwd())
+        k = config['optional']['k']
+        fernet = Fernet(k)
+        step1 = config['optional']['pwd']
+        step2 = bytes(step1[1:], "utf8")
+        PWD = (fernet.decrypt(step2).decode()).strip()
+        #mstsc=r'C:\Windows\System32\mstsc.exe'
+        #print(len(PWD))
+        if len(PWD) > 2:
+            subprocess.Popen([r'..\bin\RDPwithPWD.bat', self.currentcell, username,PWD])
+            #os.system(f'cmdkey /generic:{self.currentcell} /user:{username} /pass:{PWD}')
+            #time.sleep(1)
+            #p=subprocess.Popen([mstsc,f'/v:{self.currentcell}'] )
+            #time.sleep(5)
+            #os.system(f'cmdkey /delete:{self.currentcell}')    
+        else:# needs to be tested
+            subprocess.Popen([r'..\bin\RDP.bat', self.currentcell, username])
 
-        #
-        # print(self.server,username)
+        try:
+            del PWD
+            PWD=None
+        except:
+            pass
     def checkstatus(self):
         #username = self.col2.strip() + '\\' + getpass.getuser()
         
@@ -558,7 +559,7 @@ class Ui_MainWindow(object):
             sServer='Server={},{};'.format(server,port)
             remoteconn=pyodbc.connect('Driver={SQL Server Native Client 11.0};'+sServer+'DATABASE=master;''Trusted_Connection=yes;',timeout=15)
             cur = remoteconn.cursor()
-            with open('C:/InventoryV2/bin/status.sql') as script:
+            with open('../bin/status.sql') as script:
                 query=script.read()
             cur.execute(query)
             results=cur.fetchone()
@@ -585,7 +586,7 @@ class Ui_MainWindow(object):
         try:
             port=self.col14.strip()
             sServer='{},{}'.format(server,port)
-            script=r'C:\InventoryV2\bin\healthcheck.sql'
+            script=r'..\bin\healthcheck.sql'
             hcreportname=user_profile+'\\'+exportdirectory
             result=r'{}\{}_healthcheck.html'.format(hcreportname,uname)
             sqlcmd=sqlcmdpath.strip('"')+'SQLCMD.EXE'
@@ -614,24 +615,33 @@ class Ui_MainWindow(object):
 
     def SSH(self):
         try:
-            subprocess.Popen([r'C:\inventoryV2\bin\putty.bat', self.currentcell])
+            #subprocess.Popen([r'..\bin\putty.bat', self.currentcell])
+            p=subprocess.Popen(['../bin/putty.exe', '-ssh', self.currentcell])
+            #p.wait()
         except Exception as e:
             logger.error(str(e))
 
     # noinspection PyTypeChecker
     def export(self):
-        #
-        if self.df.empty:
-            self.errmsg('Warning', 'No Data to be exported!')
-        else:
+        try:
+            path = QtWidgets.QFileDialog.getSaveFileName(
+                self.Outputtbl, 'Save File', 'DB-inventory', 'CSV (*.csv)')
+            with open(path[0], 'w') as stream:
+                writer = csv.writer(stream)
+                writer.writerow(fields)
+                for row in range(self.model.rowCount(None)):
+                    rowdata = []
+                    #rowdata.append(fields)
+                    for col in range(self.model.columnCount(None)):
+                        #item = self.Outputtbl.item(row, column)
+                        item=self.model.data(self.model.index(row, col), Qt.DisplayRole)
 
-            try:
-                user_profile = os.environ['USERPROFILE']
-                FileName: str = user_profile + '/' + exportdirectory + '/inventory_export.csv'
-                # print(FileName)
-                self.df.to_csv(FileName, index=False)
-                self.errmsg('Information', 'inventory_export saved in default export Directory')
-            except Exception as e:
+                        if item is not None:
+                            rowdata.append(item)#.text())#.encode('utf8'))
+                        else:
+                            rowdata.append('')
+                    writer.writerow(rowdata)
+        except Exception as e:
                 logger.error(str(e))
                 self.errmsg('Warning', 'An error occured while exporting your file!')
 

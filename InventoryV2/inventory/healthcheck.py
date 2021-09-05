@@ -1,3 +1,7 @@
+'''
+LGPL License
+Copyright (c) [2021] [bmalmutairi15@gmail.com]
+'''
 import os
 import sys,getpass
 from PySide2 import QtCore, QtWidgets, QtWebEngineWidgets , QtGui
