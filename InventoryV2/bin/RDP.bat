@@ -4,10 +4,10 @@ if “%1%” == “” (
 pause
 goto :eof
 )
-set DBserver=%~1%
-set DomainUser=%2%
+set sServer=%~1%
+set sUser=%2%
 set sSeconds=10
-cmdkey /generic:TERMSRV/%DBserver% /user:%DomainUser%
-start mstsc /v:%DBserver%
-ping -n %WaitTime% 127.0.0.1 >nul:
-cmdkey /delete:TERMSRV/%DBserver%
+CMDKEY /generic:TERMSRV/%sServer% /user:%sUser%
+start mstsc /v:%sServer%
+ping -n %sSeconds% 127.0.0.1 >nul:
+cmdkey /delete:TERMSRV/%sServer%

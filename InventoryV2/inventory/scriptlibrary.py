@@ -1,3 +1,7 @@
+'''
+LGPL License
+Copyright (c) [2021] [bmalmutairi15@gmail.com]
+'''
 from PySide2 import QtCore, QtGui, QtWidgets
 from PySide2.QtWidgets import *
 #QMessageBox

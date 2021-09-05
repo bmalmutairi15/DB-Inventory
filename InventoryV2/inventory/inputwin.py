@@ -1,4 +1,7 @@
-
+'''
+LGPL License
+Copyright (c) [2021] [bmalmutairi15@gmail.com]
+'''
 from PySide2 import QtCore, QtGui, QtWidgets
 #from PyQt5.QtCore import  Qt
 import pyodbc
