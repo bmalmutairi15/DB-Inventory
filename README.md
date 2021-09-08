@@ -28,13 +28,9 @@ Package                   Version
 ------------------------- ---------
 configparser              5.0.2     >> https://pypi.org/project/configparser/
 cryptography              3.4.8     >> https://pypi.org/project/cryptography/
-numpy                     1.21.2    >> https://pypi.org/project/numpy/
-pandas                    1.3.2     >> https://pandas.pydata.org/
 pyodbc                    4.0.32    >> https://pypi.org/project/pyodbc/
 PySide2                   5.15.2    >> https://pypi.org/project/PySide2/
 qtmodern                  0.2.0     >> https://pypi.org/project/qtmodern/ 
-
-
 Healthcheck.sql >> is a modified copy of http://udayarumilli.com/sql-server-health-check-html-report/
 splashscreen    >> is a modified copy of https://learndataanalysis.org/source-code-create-a-modern-style-flash-screen-pyqt5-tutorial/
 
