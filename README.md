@@ -22,10 +22,9 @@ fields = ID,Name,Domain,col3,col4,col5,col6,col7,col8,col9,col10,col11,col12,col
 5. when the application start, it will look for the config file in %Appdata%, if it's not there a new copy will be taken from C:InventoryV2\deployment\ folder
 
 Finally, please report any issues you face using this app. by default inventoryV2.log will be located in Documents folder.<br/>
-
-#pip list for this project:<br/>
-Package                   Version<br/>
 ------------------------- ---------
+#pip list for this project:<br/>
+
 configparser              5.0.2     >> https://pypi.org/project/configparser/<br/>
 cryptography              3.4.8     >> https://pypi.org/project/cryptography/<br/>
 pyodbc                    4.0.32    >> https://pypi.org/project/pyodbc/<br/>
