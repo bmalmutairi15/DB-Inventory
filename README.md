@@ -1,5 +1,5 @@
 # DB-Inventory
-By Bandar M. Almutairi "bmalmutairi15@gmail.com"
+By Bandar M. Almutairi "bmalmutairi15@gmail.com"<\n>
 Centralized Database Servers inventory.
 Minimum required steps to get started:
 1. Copy InventoryV2 to C: drive
