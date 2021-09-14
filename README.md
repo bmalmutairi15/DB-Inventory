@@ -1,7 +1,7 @@
 # DB-Inventory
 By Bandar M. Almutairi "bmalmutairi15@gmail.com"<br/>
 Centralized Database Servers inventory.<br/>
-![alt text](https://github.com/bmalmutairi15/DB-Inventory/blob/main/dashboard.png?raw=true)
+![alt text](https://github.com/bmalmutairi15/DB-Inventory/blob/main/Screenshots/dashboard.PNG?raw=true)
 Minimum required steps to get started:<br/>
 1. Copy InventoryV2 to C: drive<br/>
 2. Create the sql database using C:\InventoryV2\deployment\InventoryV2Database.sql<br/>
