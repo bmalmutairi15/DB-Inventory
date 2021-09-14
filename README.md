@@ -1,7 +1,7 @@
 # DB-Inventory
 By Bandar M. Almutairi "bmalmutairi15@gmail.com"<br/>
-Centralized Database Servers inventory.
-Minimum required steps to get started:
+Centralized Database Servers inventory.<br/>
+Minimum required steps to get started:<br/>
 1. Copy InventoryV2 to C: drive
 2. Create the sql database using C:\InventoryV2\deployment\InventoryV2Database.sql
 3. Create User DSN for ODBC Connection:
@@ -21,18 +21,18 @@ fields = ID,Name,Domain,col3,col4,col5,col6,col7,col8,col9,col10,col11,col12,col
 	-fifteenth column "col14" should be the port number. it will be used to connect to remote servers for healthcheck and status
 5. when the application start, it will look for the config file in %Appdata%, if it's not there a new copy will be taken from C:InventoryV2\deployment\ folder
 
-Finally, please report any issues you face using this app. by default inventoryV2.log will be located in Documents folder.
+Finally, please report any issues you face using this app. by default inventoryV2.log will be located in Documents folder.<br/>
 
-#pip list for this project:
-Package                   Version
+#pip list for this project:<br/>
+Package                   Version<br/>
 ------------------------- ---------
-configparser              5.0.2     >> https://pypi.org/project/configparser/
-cryptography              3.4.8     >> https://pypi.org/project/cryptography/
-pyodbc                    4.0.32    >> https://pypi.org/project/pyodbc/
-PySide2                   5.15.2    >> https://pypi.org/project/PySide2/
-qtmodern                  0.2.0     >> https://pypi.org/project/qtmodern/ 
-Healthcheck.sql >> is a modified copy of http://udayarumilli.com/sql-server-health-check-html-report/
-splashscreen    >> is a modified copy of https://learndataanalysis.org/source-code-create-a-modern-style-flash-screen-pyqt5-tutorial/
+configparser              5.0.2     >> https://pypi.org/project/configparser/<br/>
+cryptography              3.4.8     >> https://pypi.org/project/cryptography/<br/>
+pyodbc                    4.0.32    >> https://pypi.org/project/pyodbc/<br/>
+PySide2                   5.15.2    >> https://pypi.org/project/PySide2/<br/><br/>
+qtmodern                  0.2.0     >> https://pypi.org/project/qtmodern/ <br/>
+Healthcheck.sql >> is a modified copy of http://udayarumilli.com/sql-server-health-check-html-report/<br/>
+splashscreen    >> is a modified copy of https://learndataanalysis.org/source-code-create-a-modern-style-flash-screen-pyqt5-tutorial/<br/>
 
 
 
