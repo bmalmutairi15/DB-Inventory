@@ -8,9 +8,10 @@ Features:<br/>
 3. Generate HTML healthcheck report for one target server.<br/>
 4. Check the status of the server; Primary, secondary, resolving, active FCI node or standalone.<br/>
 5. Script Library<br/><br/>
-![alt text](https://github.com/bmalmutairi15/DB-Inventory/blob/main/Screenshots/dashboard.PNG?raw=true)
-<br/>
+
 ![alt text](https://github.com/bmalmutairi15/DB-Inventory/blob/main/Screenshots/DarkOrangetheme.PNG?raw=true)
+<br/>
+![alt text](https://github.com/bmalmutairi15/DB-Inventory/blob/main/Screenshots/dashboard.PNG?raw=true)
 <br/>
 
 Minimum required steps to get started:<br/>
