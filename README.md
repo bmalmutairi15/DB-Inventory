@@ -1,6 +1,13 @@
 # DB-Inventory
 By Bandar M. Almutairi "bmalmutairi15@gmail.com"<br/>
-Centralized Database Servers inventory.<br/><br/><br/>
+Centralized Database Servers inventory.<br/>
+<br/>
+Features:<br/>
+1. add, delete and update existing records.<br/>
+2. RDP & SSH to remote servers.<br/>
+3. Generate HTML healthcheck report for one target server.<br/>
+4. Check the status of the server; Primary, secondary, resolving, active FCI node or standalone.<br/>
+5. Script Library<br/>
 ![alt text](https://github.com/bmalmutairi15/DB-Inventory/blob/main/Screenshots/dashboard.PNG?raw=true)
 <br/>
 ![alt text](https://github.com/bmalmutairi15/DB-Inventory/blob/main/Screenshots/DarkOrangetheme.PNG?raw=true)<br/>
@@ -32,7 +39,7 @@ configparser              5.0.2     >> https://pypi.org/project/configparser/<br
 cryptography              3.4.8     >> https://pypi.org/project/cryptography/<br/>
 pyodbc                    4.0.32    >> https://pypi.org/project/pyodbc/<br/>
 PySide2                   5.15.2    >> https://pypi.org/project/PySide2/<br/>
-qtmodern                  0.2.0     >> https://pypi.org/project/qtmodern/ <br/>
+styles.py and window.py >> are modified copy of  https://pypi.org/project/qtmodern/ <br/>
 Healthcheck.sql >> is a modified copy of http://udayarumilli.com/sql-server-health-check-html-report/<br/>
 splashscreen    >> is a modified copy of https://learndataanalysis.org/source-code-create-a-modern-style-flash-screen-pyqt5-tutorial/<br/>
 
