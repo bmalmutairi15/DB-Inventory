@@ -2,22 +2,25 @@
 LGPL License
 Copyright (c) [2021] [bmalmutairi15@gmail.com]
 '''
-from PySide2.QtCharts import *
-from PySide2.QtGui import  QPen, QColor, QBrush 
-from PySide2.QtWidgets import  QTableView, QWidget, QProgressBar, QFrame, QVBoxLayout, QLabel, QMessageBox
-from PySide2.QtCore import QAbstractTableModel, Qt, QTimer
+from PySide2.QtCharts import QtCharts#QPieSeries
+from PySide2.QtGui import  QPen, QColor, QBrush ,QPainter,QIcon
+from PySide2.QtWidgets import  (QTableView, QWidget, QProgressBar, QFrame, QVBoxLayout, QLabel
+    , QMessageBox,QApplication,QMainWindow,QHBoxLayout,QLineEdit,QPushButton,QToolButton
+    ,QGridLayout,QStatusBar, QHeaderView, QDialog, QFileDialog)
+from PySide2.QtCore import QAbstractTableModel, Qt, QTimer,QRect,QCoreApplication,QMetaObject
 import sys,os,csv,time
 import shutil
 from cryptography.fernet import Fernet
 import pyodbc
-import qtmodern.styles
-import qtmodern.windows
+import styles
+import windows
+#import qtmodern2.styles2
+#import qtmodern2.windows2
 import getpass
 import subprocess
 import gc 
 import logging
 from logging.handlers import RotatingFileHandler
-import configparser
 import configparser
 config = configparser.ConfigParser()
 configfile = os.environ['AppData'] + '\\InventoryV2Config.ini'
@@ -28,7 +31,7 @@ else:
     config.read(configfile)
 from inputwin import Ui_Dialog
 from preference import Ui_Dialog2
-from healthcheck import Ui_Form
+#from healthcheck import Ui_Form
 from scriptlibrary import *
 import webbrowser
 username = getpass.getuser()
@@ -103,7 +106,7 @@ class TableModel(QtCore.QAbstractTableModel):
         return False
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
-        self.errmsg('About', 'Welcome to Database Inventory!<br/>Version: 2.1.0.2<br/>Owner: Bandar Almutairi!<br/>Email:bmalmutairi15@gmail.com')
+        self.errmsg('About', 'Welcome to Database Inventory!<br/>Version: 2.1.0.4<br/>Owner: Bandar Almutairi!<br/>Email:bmalmutairi15@gmail.com')
         # time.sleep(10)
         MainWindow.setObjectName("MainWindow")
         # MainWindow.resize(1600, 1000)
@@ -174,6 +177,7 @@ class Ui_MainWindow(object):
         # self.horizontalLayout.addItem(spacerItem)
         self.toolButton = QtWidgets.QToolButton(self.horizontalLayoutWidget, clicked=lambda: self.pref())
         self.toolButton.setObjectName("toolButton")
+        self.toolButton.setIcon(QIcon('C:/InventoryV2/icons/icon_settings.png'))
         self.horizontalLayout.addWidget(self.toolButton)
 
         self.gridLayoutWidget = QtWidgets.QWidget(self.centralwidget)
@@ -494,18 +498,6 @@ class Ui_MainWindow(object):
         self.ui.setupUi(self.prefwin)
         self.prefwin.show()
 
-    def hcreport(self):
-        try:
-            del self.reportwin
-            del self.ui3
-        except:
-            pass
-        self.reportwin = QtWidgets.QWidget()
-        # self.reportwin.setWindowFlag(QtCore.Qt.FramelessWindowHint)
-        self.ui3 = Ui_Form()
-        self.ui3.setupUi(self.reportwin)
-        self.reportwin.show()
-
     def delete(self):
         # self.errors('One record deleted')
 
@@ -571,6 +563,7 @@ class Ui_MainWindow(object):
             logger.error(str(e))
             self.errmsg('Warning', 'Operation Failed! please check inventoryV2.log for more details.')
     def HealthCheck(self):
+
         try:
             username = self.col2.strip() + '\\' + getpass.getuser()
             uname=getpass.getuser()
@@ -597,7 +590,7 @@ class Ui_MainWindow(object):
                 if UseNativeBrowser==1:
                     webbrowser.open('file://{}/{}_healthcheck.html'.format(hcreportname,uname),new=2)
                 elif UseNativeBrowser==0:
-                    self.hcreport()
+                    print('to be removed line 626')
                 else:
                     self.errmsg('Warning', 'Unable to open HealthCheck Report')            
             else:
@@ -612,6 +605,7 @@ class Ui_MainWindow(object):
         except Exception as e:
             logger.error(str(e))
             self.errmsg('Warning', 'Operation Failed! please check inventoryV2.log for more details.')
+            
 
     def SSH(self):
         try:
@@ -762,16 +756,24 @@ if __name__ == "__main__":
     splash.show()
     app.processEvents()
 
-    MainWindow = QtWidgets.QMainWindow()
-    if theme == 'light':
-        qtmodern.styles.light(app)
-    elif theme == 'dark':
-        qtmodern.styles.dark(app)
-    else:
-        qtmodern.styles.dark(app)
-
+    MainWindow = QMainWindow()
     MainWindow.resize(winWidth, winHeight)
-    mw = qtmodern.windows.ModernWindow(MainWindow)
+    if theme == 'light':
+        styles.light(app)
+        mw = windows.ModernWindow(MainWindow,theme='light')
+    elif theme == 'dark':
+        styles.dark(app)
+        mw = windows.ModernWindow(MainWindow,theme='dark')
+    elif theme == 'darkblue':
+        styles.darkblue(app)
+        mw = windows.ModernWindow(MainWindow,theme='darkblue')
+    elif theme == 'darkorange':
+        styles.darkorange(app)
+        mw = windows.ModernWindow(MainWindow,theme='darkorange')
+    else:
+        styles.darkorange(app)
+        mw = windows.ModernWindow(MainWindow,theme='darkorange')
+
     ui = Ui_MainWindow()
     ui.setupUi(MainWindow)
     # MainWindow.show()

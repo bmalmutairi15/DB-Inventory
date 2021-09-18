@@ -27,7 +27,13 @@ class Ui_Dialog2(object):
         self.gridLayout = QtWidgets.QGridLayout(self.gridLayoutWidget)
         self.gridLayout.setContentsMargins(0, 0, 0, 0)
         self.gridLayout.setObjectName("gridLayout")
-        self.themeinput = QtWidgets.QLineEdit(self.gridLayoutWidget)
+        #self.themeinput = QtWidgets.QLineEdit(self.gridLayoutWidget)
+        #self.themeinput.setObjectName("themeinput")
+        #self.gridLayout.addWidget(self.themeinput, 0, 1, 1, 1)
+        themes=['light','dark','darkorange','darkblue']
+
+        self.themeinput = QtWidgets.QComboBox(self.gridLayoutWidget)
+        self.themeinput.addItems(themes)
         self.themeinput.setObjectName("themeinput")
         self.gridLayout.addWidget(self.themeinput, 0, 1, 1, 1)
         # add editline for user entry
@@ -49,9 +55,11 @@ class Ui_Dialog2(object):
         self.exportinput = QtWidgets.QLineEdit(self.gridLayoutWidget)
         self.exportinput.setObjectName("exportinput")
         self.gridLayout.addWidget(self.exportinput, 6, 1, 1, 1)
+        '''
         self.UseNativeBrowserinput = QtWidgets.QLineEdit(self.gridLayoutWidget)
         self.UseNativeBrowserinput.setObjectName("exportinput")
         self.gridLayout.addWidget(self.UseNativeBrowserinput, 7, 1, 1, 1)
+        '''
         # add labels
         self.themeoptionlabel = QtWidgets.QLabel(self.gridLayoutWidget)
         self.themeoptionlabel.setObjectName("themeoptionlabel")
@@ -74,9 +82,11 @@ class Ui_Dialog2(object):
         self.label_8 = QtWidgets.QLabel(self.gridLayoutWidget)
         self.label_8.setObjectName("label_8")
         self.gridLayout.addWidget(self.label_8, 6, 0, 1, 1)
+        '''
         self.label_9 = QtWidgets.QLabel(self.gridLayoutWidget)
         self.label_9.setObjectName("label_9")
         self.gridLayout.addWidget(self.label_9, 7, 0, 1, 1)
+        '''
         # add buttons
         self.themebtn = QtWidgets.QPushButton(self.gridLayoutWidget, clicked= lambda : self.savetheme())
         self.themebtn.setObjectName("themebtn")
@@ -100,12 +110,12 @@ class Ui_Dialog2(object):
         self.Exportfilebtn.setEnabled(True)
         self.Exportfilebtn.setObjectName("Exportfilebtn")
         self.gridLayout.addWidget(self.Exportfilebtn, 6, 2, 1, 1)
-
+        '''
         self.UseNativeBrowserbtn = QtWidgets.QPushButton(self.gridLayoutWidget, clicked= lambda : self.saveUseNativeBrowser())
         self.UseNativeBrowserbtn.setEnabled(True)
         self.UseNativeBrowserbtn.setObjectName("UseNativeBrowserbtn")
         self.gridLayout.addWidget(self.UseNativeBrowserbtn, 7, 2, 1, 1)
-
+        '''
         self.retranslateUi(Dialog)
         self.buttonBox.accepted.connect(Dialog.accept)
         self.buttonBox.rejected.connect(Dialog.reject)
@@ -117,7 +127,7 @@ class Ui_Dialog2(object):
         self.winHoptionlabel.setText(_translate("Dialog", "Window Height"))
         self.tblHoptionlabel.setText(_translate("Dialog", "Table Height"))
         self.label_8.setText(_translate("Dialog", "Default Directory"))
-        self.label_9.setText(_translate("Dialog", "Native Browser"))
+        #self.label_9.setText(_translate("Dialog", "Native Browser"))
         self.themeoptionlabel.setText(_translate("Dialog", "Theme"))
         self.WinWoptionlabel.setText(_translate("Dialog", "Window Width"))
         self.tblWoptionlabel.setText(_translate("Dialog", "Table Width"))
@@ -128,7 +138,7 @@ class Ui_Dialog2(object):
         self.tblHbtn.setText(_translate("Dialog", "Save"))
         self.tblWbtn.setText(_translate("Dialog", "Save"))
         self.PWDbtn.setText(_translate("Dialog", "Save"))
-        self.UseNativeBrowserbtn.setText(_translate("Dialog", "Save"))
+        #self.UseNativeBrowserbtn.setText(_translate("Dialog", "Save"))
         self.Exportfilebtn.setText(_translate("Dialog", "Save"))
         self.pwdinputP.setPlaceholderText('symmetric key cryptography is used')
         self.pwdinputP.setEchoMode(QtWidgets.QLineEdit.Password)
@@ -138,11 +148,11 @@ class Ui_Dialog2(object):
         self.tblHinput.setPlaceholderText('930')
         self.tblWinput.setPlaceholderText('1870')
         self.exportinput.setPlaceholderText('Documents')
-        self.UseNativeBrowserinput.setPlaceholderText('1')
+        #self.UseNativeBrowserinput.setPlaceholderText('1')
 
     def savetheme(self):
-        newval=self.themeinput.text()
-        #print(newval)
+        #newval=self.themeinput.text()
+        newval=str(self.themeinput.currentText())
         config.read(conffile)
         config['defaults']['theme']=newval
         with open(conffile, 'w') as configfile:    # save
@@ -172,12 +182,14 @@ class Ui_Dialog2(object):
         with open(conffile, 'w') as configfile:    # save
              config.write(configfile)
     #UseNativeBrowser
+    '''
     def saveUseNativeBrowser(self):
         newval=self.UseNativeBrowserinput.text()
         config.read(conffile)
         config['defaults']['UseNativeBrowser']=newval
         with open(conffile, 'w') as configfile:    # save
              config.write(configfile)
+    '''
     def savePWD(self):
         newval=self.pwdinputP.text()
         config.read(conffile)
