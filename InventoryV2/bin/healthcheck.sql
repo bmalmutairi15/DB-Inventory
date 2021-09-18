@@ -25,6 +25,7 @@ IF OBJECT_ID('tempdb..#fixeddrives') IS NOT NULL DROP TABLE #fixeddrives;
 IF OBJECT_ID('tempdb..#LogSpace') IS NOT NULL DROP TABLE #LogSpace;
 IF OBJECT_ID('tempdb..#AGStatus') IS NOT NULL DROP TABLE #AGStatus;
 IF OBJECT_ID('tempdb..#tempdbfileusage') IS NOT NULL DROP TABLE #tempdbfileusage;
+IF OBJECT_ID('tempdb..#deadlocks') IS NOT NULL DROP TABLE #deadlocks;
 
 CREATE TABLE #RebootDetails                                
 (                                
@@ -475,9 +476,47 @@ declare @endtime datetime = (select getdate()),
 Create table #errorlogs ([LogDate] datetime, [ProcessInfo] varchar(10), [Text] Varchar(1000))
 insert into #errorlogs ([LogDate], [ProcessInfo],[Text])
 Exec xp_ReadErrorLog 0,1,null,null,@starttime,@endtime,N'asc'
---select top (20) [LogDate],[Text] from #errorlogs
---where ProcessInfo not in ('Backup','Logon') and [Text] not like '%No user action is required%'
---order by [LogDate] desc
+
+---------------------------------------------------------------------
+/******************************Deadlocks******************************************/
+
+set QUOTED_IDENTIFIER off
+set NOCOUNT ON
+declare @filepath nvarchar(200),
+@dDateTime datetime,
+@query Nvarchar(1000)
+set @query="set QUOTED_IDENTIFIER on
+set NOCOUNT ON
+declare @filepath nvarchar(200),
+@dDateTime datetime
+set @dDateTime = (dateadd(hh,-24,GETDATE()))
+set @filepath=(SELECT CAST(st.target_data AS XML).value('(EventFileTarget/File/@name)[1]','nvarchar(200)') AS filepath
+        FROM sys.dm_xe_session_targets st
+        INNER JOIN sys.dm_xe_sessions s 
+ON s.address = st.event_session_address
+        WHERE s.NAME = 'system_health'
+            AND st.target_name = 'event_file')
+select dateadd(hh,+3,timestamp_utc) as timestamp, cast(event_data as xml).query(('(event/data/value/deadlock)[1]')) as [Deadlock_XML],
+'Save Deadlock_XML with .xdl extension to view the graph' as [Graph]
+from sys.fn_xe_file_target_read_file (@filepath, null, null, null ) 
+where [object_name] = 'xml_deadlock_report'
+and dateadd(hh,+3,timestamp_utc)>@dDateTime"
+set QUOTED_IDENTIFIER on
+set @dDateTime = (dateadd(hh,-24,GETDATE()))
+set @filepath=(SELECT CAST(st.target_data AS XML).value('(EventFileTarget/File/@name)[1]','nvarchar(200)') AS filepath
+        FROM sys.dm_xe_session_targets st
+        INNER JOIN sys.dm_xe_sessions s 
+ON s.address = st.event_session_address
+        WHERE s.NAME = 'system_health'
+            AND st.target_name = 'event_file')
+Create table #Deadlocks ([alert] varchar(100),  [details] nvarchar(1000))
+insert into #Deadlocks ([alert], [details])
+
+select convert(varchar(100),count(1))+' Deadlocks in the past '+convert(varchar(10),DATEDIFF(hh, @dDateTime,getdate()))+ ' Hours',@query
+
+from sys.fn_xe_file_target_read_file (@filepath, null, null, null ) 
+where [object_name] = 'xml_deadlock_report'
+and dateadd(hh,+3,timestamp_utc)>@dDateTime
 
 -------------------------------------------AG Status-------------------------------------------------------
 
@@ -598,7 +637,7 @@ td  {
 
 
 SET @TableHTML = @TableHTML +                                     
- '<div><img align="right" src="C:\InventoryV2\icons\inventory.ico" style="height: 50px; width: 50px"/><font ><H2><bold>Database Health Check Report</bold></H2></font></div>                                  
+ '<div><img align="right" src="C:\Inventory\icons\inventory.ico" style="height: 50px; width: 50px"/><font ><H2><bold>Database Health Check Report</bold></H2></font></div>                                  
  <table id="AutoNumber1">                                   
  <tr>                                  
  <th><b>                           
@@ -850,6 +889,31 @@ SELECT
   '</tr>'                               
 FROM                                   
  #AGStatus
+   /***** Deadlocks ****/  
+SELECT                                   
+ @TableHTML =  @TableHTML +                              
+ '</table>                                  
+ <p style="margin-top: 1; margin-bottom: 0">&nbsp;</p>                                  
+ <font ><H3><bold>Last 24 hrs deadlocks</bold></H3></font>                                  
+ <table id="AutoNumber1" >                                  
+   <tr>                
+ <th align="left" width="250" bgColor="#0000ff">                                    
+ <font>alert</font></th>                              
+  <th>               
+ <font>Details</font></th>                                                          
+   </tr>'                                  
+SELECT                                   
+ @TableHTML =  @TableHTML +                                       
+ '<tr>                                    
+ <td align="center"><font>' + ISNULL(CONVERT(VARCHAR(100),  alert ), 'NA')  +'</font></td>' + 
+ CASE WHEN alert='0 Deadlocks in the past 24 Hours' THEN
+ '<td align="center"><font>' + 'No Action Required'  +'</font></td>' 
+   ELSE
+   '<td align="center"><font>' + ISNULL(CONVERT(NVARCHAR(1000),  details ), 'NA')  +'</font></td>'
+   END + 
+  '</tr>'                               
+FROM                                   
+ #Deadlocks
 
     /***** DB Size ****/  
 SELECT                                   
@@ -1004,6 +1068,7 @@ IF OBJECT_ID('tempdb..#fixeddrives') IS NOT NULL DROP TABLE #fixeddrives;
 IF OBJECT_ID('tempdb..#LogSpace') IS NOT NULL DROP TABLE #LogSpace;
 IF OBJECT_ID('tempdb..#AGStatus') IS NOT NULL DROP TABLE #AGStatus;
 IF OBJECT_ID('tempdb..#tempdbfileusage') IS NOT NULL DROP TABLE #tempdbfileusage;
+IF OBJECT_ID('tempdb..#deadlocks') IS NOT NULL DROP TABLE #deadlocks;
 
 SET NOCOUNT OFF;  
 SET ARITHABORT OFF;  
